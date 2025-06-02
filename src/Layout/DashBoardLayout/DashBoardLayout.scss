@@ -1,0 +1,25 @@
+.dashboard_container {
+    padding: 24px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.dashboard_card {
+    border-radius: 16px;
+    padding: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ant-table {
+    margin-top: 16px;
+}
+
+.ant-table-thead>tr>th {
+    font-weight: bold;
+}
+
+.ant-avatar {
+    object-fit: cover;
+}
+  
