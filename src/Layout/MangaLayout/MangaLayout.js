@@ -1,31 +1,40 @@
 import { useEffect, useState } from 'react'
-import { Table, Button, Space, message, Popconfirm } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  message,
+  Popconfirm,
+  Avatar,
+  Tooltip
+} from 'antd'
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { getApiUrl } from '../../api/api'
-import { AddCategory } from './AddCategory'
-import { EditCategory } from './EditCategory'
+import { AddManga } from './AddManga'
+import { EditManga } from './EditManga'
 
-function CategoryLayout () {
-  const [category, setcategory] = useState([])
+function MangaLayout () {
+  const [manga, setmanga] = useState([])
   const [loading, setLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [showAddModalAdd, setShowAddModalAdd] = useState(false)
   const [showAddModalEdit, setShowAddModalEdit] = useState(false)
-  const [selectedcategory, setSelectedcategory] = useState(null)
+  const [selectedmanga, setSelectedmanga] = useState(null)
+  const userId = '653a20c611295a22062661f9'
 
   const pageSize = 10
 
-  const fetchcategory = async (page = 1) => {
+  const fetchmanga = async (page = 1) => {
     setLoading(true)
     try {
       const res = await fetch(
-        `${getApiUrl('backend')}/categorynewweb?page=${page}&limit=${pageSize}`
+        `${getApiUrl('backend')}/mangasnew?page=${page}&limit=${pageSize}`
       )
       const data = await res.json()
       if (res.ok) {
-        setcategory(data.category)
-        setTotal(data.totalcategory)
+        setmanga(data.manga)
+        setTotal(data.totalmanga)
         setCurrentPage(data.currentPage)
       } else {
         message.error('Không thể lấy danh sách người dùng')
@@ -39,18 +48,18 @@ function CategoryLayout () {
   }
 
   useEffect(() => {
-    fetchcategory(currentPage)
+    fetchmanga(currentPage)
   }, [currentPage])
 
-  const handleEdit = category => {
-    setSelectedcategory(category)
+  const handleEdit = manga => {
+    setSelectedmanga(manga)
     setShowAddModalEdit(true)
   }
 
-  const handleDelete = async categoryid => {
+  const handleDelete = async mangaid => {
     try {
       const response = await fetch(
-        `${getApiUrl('backend')}/categorydeletenew/${categoryid}`,
+        `${getApiUrl('backend')}/mangadeletenew/${mangaid}`,
         {
           method: 'POST',
           headers: {
@@ -60,7 +69,7 @@ function CategoryLayout () {
       )
       if (response.ok) {
         message.success('xóa thành công')
-        fetchcategory()
+        fetchmanga()
       }
     } catch (error) {
       console.log(error)
@@ -69,9 +78,62 @@ function CategoryLayout () {
 
   const columns = [
     {
+      title: 'Image',
+      dataIndex: 'image',
+      key: 'image',
+      render: (_, record) => (
+        <Avatar
+          src={record.image || 'https://via.placeholder.com/40x40.png?text=M'}
+          alt='Manga'
+          shape='square'
+          size={40}
+        />
+      )
+    },
+    {
       title: 'Tên',
-      dataIndex: 'categoryname',
-      key: 'categoryname'
+      dataIndex: 'manganame',
+      key: 'manganame'
+    },
+    {
+      title: 'Tác giả',
+      dataIndex: 'author',
+      key: 'author'
+    },
+    {
+      title: 'Nội dung',
+      dataIndex: 'content',
+      key: 'content',
+      ellipsis: true,
+      render: text => (
+        <Tooltip title={text}>
+          <div
+            style={{
+              maxWidth: 300,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {text}
+          </div>
+        </Tooltip>
+      )
+    },
+    {
+      title: 'Thể loại',
+      dataIndex: 'category',
+      key: 'category'
+    },
+    {
+      title: 'Lượt xem',
+      dataIndex: 'view',
+      key: 'view'
+    },
+    {
+      title: 'Lượt thích',
+      dataIndex: 'like',
+      key: 'like'
     },
     {
       title: 'Hành động',
@@ -95,20 +157,20 @@ function CategoryLayout () {
 
   return (
     <div style={{ padding: 24 }}>
-      <h2>Quản lý thể loại</h2>
+      <h2>Quản lý truyện</h2>
       <Button
         type='primary'
         icon={<PlusOutlined />}
         style={{ marginBottom: 10, marginTop: 10 }}
         onClick={() => setShowAddModalAdd(true)}
       >
-        Thêm thể loại
+        Thêm truyện
       </Button>
 
       <Table
         rowKey='_id'
         columns={columns}
-        dataSource={category}
+        dataSource={manga}
         loading={loading}
         pagination={{
           current: currentPage,
@@ -118,20 +180,22 @@ function CategoryLayout () {
         }}
       />
 
-      <AddCategory
+      <AddManga
         visible={showAddModalAdd}
         onClose={() => setShowAddModalAdd(false)}
-        onSuccess={() => fetchcategory(currentPage)}
+        onSuccess={() => fetchmanga(currentPage)}
+        userId={userId}
       />
 
-      <EditCategory
+      <EditManga
         visible={showAddModalEdit}
-        onCancel={() => setShowAddModalEdit(false)}
-        categoryData={selectedcategory}
-        onSuccess={() => fetchcategory(currentPage)}
+        onClose={() => setShowAddModalEdit(false)}
+        manga={selectedmanga}
+        onSuccess={() => fetchmanga(currentPage)}
+        userid={userId}
       />
     </div>
   )
 }
 
-export default CategoryLayout
+export default MangaLayout

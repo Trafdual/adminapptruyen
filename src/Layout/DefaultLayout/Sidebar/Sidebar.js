@@ -26,19 +26,19 @@ function Sidebar ({ active }) {
       id: 'categoryManagerLink'
     },
     {
-      to: '#mangaManagerLink',
+      to: '/manga',
       icon: 'bxs-book-bookmark',
       text: 'Manga Manager',
       id: 'mangaManagerLink'
     },
     {
-      to: '#chapterManagerLink',
+      to: '/chapter',
       icon: 'bxs-file',
       text: 'Chapter Manager',
       id: 'chapterManagerLink'
     },
     {
-      to: '#baivietManagerLink',
+      to: '/baiviet',
       icon: 'bxs-receipt',
       text: 'Baiviet Manager',
       id: 'baivietManagerLink'

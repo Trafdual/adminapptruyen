@@ -21,7 +21,7 @@ function Header ({ active, setactive }) {
     fetchdata()
   }, [])
   return (
-    <section id='content' className={active ? 'hide' : ''}>
+    <section id='contentgd' className={active ? 'hide' : ''}>
       <nav>
         <i className='bx bx-menu' onClick={() => setactive(!active)}></i>
         <a href='#' className='nav-link'>

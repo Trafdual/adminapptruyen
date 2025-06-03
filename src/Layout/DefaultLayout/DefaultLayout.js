@@ -7,7 +7,7 @@ function DefaultLayout ({ children }) {
     <div>
       <Header active={active} setactive={setactive} />
       <Sidebar active={active} />
-      <div id='content' className={active ? 'hide' : ''}>
+      <div id='contentgd' className={active ? 'hide' : ''}>
       {children}
       </div>
     </div>
